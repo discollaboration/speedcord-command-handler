@@ -21,7 +21,7 @@ class Cog:
 
 
 class Command:
-    def __init__(self, func, name=None, *, description="\u200B", silent=False):
+    def __init__(self, func, name=None, *, description="\u200B", silent=False, default_permission=True):
         self.func = func
         self.cog = None  # Gets filled in by Cog
         self.name = name or func.__name__
@@ -31,12 +31,14 @@ class Command:
         self.options = getattr(func, "options", [])
         self.options.reverse()
         self.silent = silent
+        self.default_permission = default_permission
 
     def export_slash_command(self):
         return {
             "name": self.name,
             "description": self.description,
-            "options": [i.export() for i in self.options]
+            "options": [i.export() for i in self.options],
+            "default_permission": self.default_permission
         }
 
     def get_option(self, name):
